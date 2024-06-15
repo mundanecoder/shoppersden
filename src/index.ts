@@ -62,7 +62,8 @@ fastify.register(autoLoad, {
 
 const startServer = async () => {
   try {
-    await fastify.listen(8000);
+    await fastify.ready();
+    fastify.server.listen(8000);
     fastify.log.info(`Server listening on port 8000`);
   } catch (error) {
     fastify.log.error(`Error starting server: ${error}`);
@@ -73,7 +74,6 @@ const startServer = async () => {
 const runApp = async () => {
   try {
     await connectToDb(); 
-    await fastify.ready();
     await startServer();
   } catch (error) {
     fastify.log.error(`Error starting application: ${error}`);
