@@ -1,21 +1,22 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { createClerkClient, getAuth } from "@clerk/fastify";
+import { UserResource } from "@clerk/types";
 
 const clerkOptions = {
   publishableKey: process.env.CLERK_PUBLISHABLE_KEY!,
   secretKey: process.env.CLERK_SECRET_KEY!,
 };
 
-const clerkClient = createClerkClient(clerkOptions);
-
 declare module "fastify" {
   interface FastifyRequest {
-    user?: {}; 
+    user?: UserResource;
   }
 }
 
+const clerkClient = createClerkClient(clerkOptions);
+
 const authMiddleware = (fastify: FastifyInstance) => {
-  fastify.addHook("preHandler", async (request: FastifyRequest, reply: FastifyReply) => {
+  return async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { userId } = getAuth(request);
 
@@ -23,17 +24,22 @@ const authMiddleware = (fastify: FastifyInstance) => {
         return reply.code(401).send({ error: "Unauthorized: Missing user ID" });
       }
 
-      const user = await clerkClient.users.getUser(userId);
+      const user = (await clerkClient.users.getUser(
+        userId
+      )) as unknown as UserResource;
 
       if (user) {
         console.log("User authenticated successfully");
-        request.user = user; // Attach user to the request
+
+        request.user = user;
+      } else {
+        return reply.code(401).send({ error: "Unauthorized: User not found" });
       }
     } catch (error) {
       console.error("Error in auth middleware:", error);
       return reply.code(500).send({ error: "Server error" });
     }
-  });
+  };
 };
 
 export default authMiddleware;
