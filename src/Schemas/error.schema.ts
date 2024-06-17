@@ -27,7 +27,7 @@ export const BadRequestResponseSchema = Type.Strict(
 export const UnAuthorizedResponseSchema = Type.Strict(
   Type.Object({
     statusCode: Type.Number({ default: 401 }),
-    error: Type.String({ default: "Unauthorized" }),
+    error: Type.String({ default: "Unauthorized " }),
     message: Type.String(),
   })
 );

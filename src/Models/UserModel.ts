@@ -36,10 +36,12 @@ const UserSchema = new Schema<IUserDocument>(
       required: true,
     },
     phoneNumbers: {
-      type: Array,
+      type: [String],
     },
     age: {
       type: Number,
+      min: 0,
+      max: 150,
     },
     gender: {
       type: String,
@@ -47,6 +49,14 @@ const UserSchema = new Schema<IUserDocument>(
     email: {
       type: String,
       required: true,
+      unique: true,
+      validate: {
+        validator: (value: string) => {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          return emailRegex.test(value);
+        },
+        message: "Please enter a valid email address",
+      },
     },
     userDeleted: {
       type: Boolean,

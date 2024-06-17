@@ -21,7 +21,9 @@ const authMiddleware = (fastify: FastifyInstance) => {
       const { userId } = getAuth(request);
 
       if (!userId) {
-        return reply.code(401).send({ error: "Unauthorized: Missing user ID" });
+        return reply
+          .code(401)
+          .send({ success: false, message: "Unauthorized: Missing user ID" });
       }
 
       const user = (await clerkClient.users.getUser(
@@ -33,7 +35,10 @@ const authMiddleware = (fastify: FastifyInstance) => {
 
         request.user = user;
       } else {
-        return reply.code(401).send({ error: "Unauthorized: User not found" });
+        return reply.code(401).send({
+          success: false,
+          message: "unauthorized",
+        });
       }
     } catch (error) {
       console.error("Error in auth middleware:", error);

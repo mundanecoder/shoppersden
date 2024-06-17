@@ -3,20 +3,10 @@ import {
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
 } from "../../Schemas/error.schema";
+import { UserResource } from "@clerk/types";
 
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-// import { Type, Static } from "@sinclair/typebox";
-import UserDB from "../../Models/UserModel";
-
-// const BodySchema = Type.Strict(
-//   Type.Object({
-//     name: Type.String({ minLength: 1 }),
-//     email: Type.String({ format: "email" }),
-//     age: Type.String({ minLength: 1 }),
-//   })
-// );
-
-// type BodyType = Static<typeof BodySchema>;
+import { createUser } from "../../Services/user"; // Import the createUser function
 
 export default function createUserRoute(fastify: FastifyInstance) {
   fastify.post(
@@ -33,33 +23,26 @@ export default function createUserRoute(fastify: FastifyInstance) {
     async (req: FastifyRequest, rep: FastifyReply) => {
       const userData = req.user;
 
-      console.log(userData?.emailAddresses);
-
       try {
-        const userExist = await UserDB.findOne({
-          email: userData?.emailAddresses[0].emailAddress,
-        });
+        const result = await createUser(userData as UserResource);
 
-        if (!userExist) {
-          let newUser = new UserDB({
-            firstname: userData?.firstName,
-            lastName: userData?.lastName,
-            fullName: userData?.fullName,
-            phoneNumbers: userData?.phoneNumbers ? userData?.phoneNumbers : "",
+        if (result.success) {
+          return rep.status(201).send({
+            message: result.message,
             email: userData?.emailAddresses[0].emailAddress,
-            clerkId: userData?.id,
           });
-
-          await newUser.save();
-
+        } else {
           return rep.status(200).send({
-            message: "User created successfully",
+            message: result.message,
             email: userData?.emailAddresses[0].emailAddress,
           });
         }
       } catch (error) {
-        console.error(error);
-        rep.status(500).send({ message: "Internal Server Error" });
+        console.error("Error in createUserRoute:", error);
+        return rep.status(500).send({
+          error: "Internal Server Error",
+          message: "An error occurred while creating the user",
+        });
       }
     }
   );
