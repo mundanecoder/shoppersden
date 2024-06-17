@@ -1,14 +1,23 @@
-import Fastify, { FastifyPluginCallback } from "fastify";
+import Fastify from "fastify";
 import { join } from "path";
 import * as dotenv from "dotenv";
 import connectToDb from "./Database/db";
-import swaggerPlugin from "./Plugin/SwaggerPlugin";
 import { registerPlugins } from "./Utility/pluginMapper";
 import { corsPlugin } from "./Plugin/CorsPlugin";
+import fastifySensible from "@fastify/sensible";
+import { clerkPlugin } from "@clerk/fastify";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
 import { autoLoadPlugin } from "./Plugin/AutoLoadPlugin";
 
 dotenv.config();
 
+const clerkOptions = {
+  publishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+  secretKey: process.env.CLERK_SECRET_KEY,
+};
+
+// Plugin configurations
 const plugins = [
   {
     plugin: corsPlugin,
@@ -26,16 +35,7 @@ const plugins = [
   {
     plugin: autoLoadPlugin,
     options: {
-      dir: join(__dirname, '/routes'), 
-    },
-  },
-  {
-    plugin: swaggerPlugin,
-    options: {
-      routePrefix: "api/v1/docs",
-      title: "ShoppersDen API Documentation",
-      docExpansion: "list",
-      deepLinking: true,
+      dir: join(__dirname, "./routes"),
     },
   },
 ];
@@ -60,18 +60,53 @@ const fastify = Fastify({
   logger: envToLogger[environment as keyof typeof envToLogger] ?? true,
 });
 
+fastify.register(fastifySensible);
+fastify.register(clerkPlugin, clerkOptions);
+
+fastify.register(fastifySwagger);
+fastify.register(fastifySwaggerUi, {
+  routePrefix: "/api/v1/docs",
+  uiConfig: {
+    docExpansion: "full",
+    deepLinking: false,
+  },
+  uiHooks: {
+    onRequest: function (_request, _reply, next) {
+      next();
+    },
+    preHandler: function (_request, _reply, next) {
+      next();
+    },
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
+  transformSpecification: (swaggerObject, _request, _reply) => {
+    return {
+      ...swaggerObject,
+      info: {
+        title: "ShoppersDen API Documentation",
+      },
+    };
+  },
+  transformSpecificationClone: true,
+});
+
+/**
+ * Register plugins through this utility function
+ * Pass the fastify instance and the plugins array, your plugin should be imported to this file and included in the array at the top of the file
+ */
+registerPlugins(fastify, plugins);
+
 const startServer = async () => {
   try {
-
-    /**
- * Utility function to register plugin with fastify
- * Make sure the plugins are ordered properly
- */
-    await registerPlugins(fastify, plugins);
-
     await fastify.ready();
-    fastify.server.listen(8000);
-    fastify.log.info(`Server listening on port 8000`);
+    fastify.listen({ port: 8000 }, (err, address) => {
+      if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+      }
+      fastify.log.info(`Server listening on ${address}`);
+    });
   } catch (error) {
     fastify.log.error(`Error starting server: ${error}`);
     process.exit(1);

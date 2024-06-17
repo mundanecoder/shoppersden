@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import autoLoad from "@fastify/autoload";
-import { join } from "path";
 
 interface AutoLoadPluginOptions extends FastifyPluginOptions {
   dir: string;
@@ -15,7 +14,7 @@ export function autoLoadPlugin(
 
   fastify.register(autoLoad, {
     dir,
-    // options: { prefix: "/api" },
+    options: { prefix: "/api/v1" },
   });
 
   next();
