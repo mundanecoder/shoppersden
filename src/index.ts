@@ -1,21 +1,27 @@
-import Fastify from 'fastify';
-import autoLoad from '@fastify/autoload';
-import fastifyCors from '@fastify/cors';
-import fastifySwagger from '@fastify/swagger';
-import fastifySwaggerUI from '@fastify/swagger-ui';
-import { join } from 'path';
-import * as dotenv from 'dotenv';
-import connectToDb from './Database/db'; 
+import Fastify from "fastify";
+import autoLoad from "@fastify/autoload";
+import fastifyCors from "@fastify/cors";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUI from "@fastify/swagger-ui";
+import { join } from "path";
+import * as dotenv from "dotenv";
+import connectToDb from "./Database/db";
+import fastifySensible from "@fastify/sensible";
+import { clerkPlugin } from "@clerk/fastify";
 
 dotenv.config();
+const clerkOptions = {
+  publishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+  secretKey: process.env.CLERK_SECRET_KEY,
+};
 
 const envToLogger = {
   development: {
     transport: {
-      target: 'pino-pretty',
+      target: "pino-pretty",
       options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
+        translateTime: "HH:MM:ss Z",
+        ignore: "pid,hostname",
       },
     },
   },
@@ -23,41 +29,48 @@ const envToLogger = {
   test: false,
 };
 
-const environment: string = process.env.NODE_ENV || 'development';
+const environment: string = process.env.NODE_ENV || "development";
 
 const fastify = Fastify({
   logger: envToLogger[environment as keyof typeof envToLogger] ?? true,
 });
 
 fastify.register(fastifyCors, {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
 });
-
+fastify.register(fastifySensible);
 fastify.register(fastifySwagger);
 fastify.register(fastifySwaggerUI, {
-  routePrefix: 'api/docs',
+  routePrefix: "api/docs",
   uiConfig: {
-    docExpansion: 'full',
-    deepLinking: false
+    docExpansion: "full",
+    deepLinking: false,
   },
   uiHooks: {
-    onRequest: function (request, reply, next) { next() },
-    preHandler: function (request, reply, next) { next() }
+    onRequest: function (request, reply, next) {
+      next();
+    },
+    preHandler: function (request, reply, next) {
+      next();
+    },
   },
   staticCSP: true,
   transformStaticCSP: (header) => header,
-  transformSpecification: (swaggerObject, request, reply) => { return {
-    ...swaggerObject,
-    info: {
-      title: "ShoppersDen API docs"
-    },
-  } },
-  transformSpecificationClone: true
+  transformSpecification: (swaggerObject, request, reply) => {
+    return {
+      ...swaggerObject,
+      info: {
+        title: "ShoppersDen API docs",
+      },
+    };
+  },
+  transformSpecificationClone: true,
 });
+fastify.register(clerkPlugin, clerkOptions);
 
 fastify.register(autoLoad, {
-  dir: join(__dirname, './routes'),
+  dir: join(__dirname, "./routes"),
 });
 
 const startServer = async () => {
@@ -73,7 +86,7 @@ const startServer = async () => {
 
 const runApp = async () => {
   try {
-    await connectToDb(); 
+    await connectToDb();
     await startServer();
   } catch (error) {
     fastify.log.error(`Error starting application: ${error}`);

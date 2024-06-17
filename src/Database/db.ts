@@ -1,6 +1,7 @@
 import mongoose, { Mongoose } from "mongoose";
 
-const mongoUrl: string = process.env.MONGO_URL || "mongodb+srv://<username>:<password>@buildspace-dev-cluster.ypczif0.mongodb.net/";
+const mongoUrl: string =
+  process.env.MONGO_URL || "mongodb://localhost:27017/shoppers_den_db";
 
 interface DbClient {
   connection: Mongoose;
@@ -8,6 +9,7 @@ interface DbClient {
 
 const connectToDb = async (): Promise<DbClient | null> => {
   try {
+    console.log("Connecting to database...");
     const connection = await mongoose.connect(mongoUrl);
 
     console.log("Connected to the database");
