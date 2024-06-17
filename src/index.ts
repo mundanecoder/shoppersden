@@ -1,21 +1,52 @@
-import Fastify from 'fastify';
-import autoLoad from '@fastify/autoload';
-import fastifyCors from '@fastify/cors';
-import fastifySwagger from '@fastify/swagger';
-import fastifySwaggerUI from '@fastify/swagger-ui';
-import { join } from 'path';
-import * as dotenv from 'dotenv';
-import connectToDb from './Database/db'; 
+import Fastify, { FastifyPluginCallback } from "fastify";
+import { join } from "path";
+import * as dotenv from "dotenv";
+import connectToDb from "./Database/db";
+import swaggerPlugin from "./Plugin/SwaggerPlugin";
+import { registerPlugins } from "./Utility/pluginMapper";
+import { corsPlugin } from "./Plugin/CorsPlugin";
+import { autoLoadPlugin } from "./Plugin/AutoLoadPlugin";
 
 dotenv.config();
+
+const plugins = [
+  {
+    plugin: corsPlugin,
+    options: {
+      origin: "*",
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      exposedHeaders: ["Content-Length", "ETag"],
+      credentials: true,
+      maxAge: 86400,
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
+    },
+  },
+  {
+    plugin: autoLoadPlugin,
+    options: {
+      dir: join(__dirname, '/routes'), 
+    },
+  },
+  {
+    plugin: swaggerPlugin,
+    options: {
+      routePrefix: "api/v1/docs",
+      title: "ShoppersDen API Documentation",
+      docExpansion: "list",
+      deepLinking: true,
+    },
+  },
+];
 
 const envToLogger = {
   development: {
     transport: {
-      target: 'pino-pretty',
+      target: "pino-pretty",
       options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
+        translateTime: "HH:MM:ss Z",
+        ignore: "pid,hostname",
       },
     },
   },
@@ -23,45 +54,21 @@ const envToLogger = {
   test: false,
 };
 
-const environment: string = process.env.NODE_ENV || 'development';
+const environment: string = process.env.NODE_ENV || "development";
 
 const fastify = Fastify({
   logger: envToLogger[environment as keyof typeof envToLogger] ?? true,
 });
 
-fastify.register(fastifyCors, {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-});
-
-fastify.register(fastifySwagger);
-fastify.register(fastifySwaggerUI, {
-  routePrefix: 'api/docs',
-  uiConfig: {
-    docExpansion: 'full',
-    deepLinking: false
-  },
-  uiHooks: {
-    onRequest: function (request, reply, next) { next() },
-    preHandler: function (request, reply, next) { next() }
-  },
-  staticCSP: true,
-  transformStaticCSP: (header) => header,
-  transformSpecification: (swaggerObject, request, reply) => { return {
-    ...swaggerObject,
-    info: {
-      title: "ShoppersDen API docs"
-    },
-  } },
-  transformSpecificationClone: true
-});
-
-fastify.register(autoLoad, {
-  dir: join(__dirname, './routes'),
-});
-
 const startServer = async () => {
   try {
+
+    /**
+ * Utility function to register plugin with fastify
+ * Make sure the plugins are ordered properly
+ */
+    await registerPlugins(fastify, plugins);
+
     await fastify.ready();
     fastify.server.listen(8000);
     fastify.log.info(`Server listening on port 8000`);
@@ -73,7 +80,7 @@ const startServer = async () => {
 
 const runApp = async () => {
   try {
-    await connectToDb(); 
+    await connectToDb();
     await startServer();
   } catch (error) {
     fastify.log.error(`Error starting application: ${error}`);

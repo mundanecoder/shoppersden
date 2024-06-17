@@ -1,6 +1,6 @@
 import mongoose, { Mongoose } from "mongoose";
 
-const mongoUrl: string = process.env.MONGO_URL || "mongodb+srv://<username>:<password>@buildspace-dev-cluster.ypczif0.mongodb.net/";
+const mongoUrl: string = process.env.MONGO_URL || "mongodb+srv://root:root@buildspace-dev-cluster.ypczif0.mongodb.net/";
 
 interface DbClient {
   connection: Mongoose;
