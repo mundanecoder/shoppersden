@@ -4,12 +4,13 @@ export interface IUser {
   firstname: string;
   lastName: string;
   fullName: string;
-  phoneNumbers?: string;
+  phoneNumbers?: string[];
   age?: number;
   gender?: string;
   email: string;
   userDeleted?: boolean;
   clerkId: string;
+  userName: string;
 }
 
 export interface IUserDocument extends IUser, Document {
@@ -34,6 +35,11 @@ const UserSchema = new Schema<IUserDocument>(
     fullName: {
       type: String,
       required: true,
+    },
+    userName: {
+      type: String,
+      required: true,
+      unique: true,
     },
     phoneNumbers: {
       type: [String],

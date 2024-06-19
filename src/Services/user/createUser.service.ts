@@ -10,11 +10,16 @@ export async function createUser(
     });
 
     console.log("here");
+    const generateUsername = (): string => {
+      const randomString = Math.random().toString(36).substring(2, 8);
+      return `user_${randomString}`;
+    };
 
     if (!userExist) {
       const newUser: IUserDocument = new UserDB({
         firstname: userData?.firstName,
         lastName: userData?.lastName,
+        userName: generateUsername(),
         fullName: userData?.fullName,
         phoneNumbers: userData?.phoneNumbers ?? null,
         email: userData?.emailAddresses[0].emailAddress,

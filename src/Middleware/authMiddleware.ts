@@ -1,15 +1,23 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { createClerkClient, getAuth } from "@clerk/fastify";
 import { UserResource } from "@clerk/types";
+import UserDB from "../Models/UserModel";
+import { ObjectId } from "@fastify/mongodb";
 
 const clerkOptions = {
   publishableKey: process.env.CLERK_PUBLISHABLE_KEY!,
   secretKey: process.env.CLERK_SECRET_KEY!,
 };
 
+export interface IUserMongoId {
+  _MongoId: ObjectId;
+}
+
+export type ExtendedUserResource = UserResource & IUserMongoId;
+
 declare module "fastify" {
   interface FastifyRequest {
-    user?: UserResource;
+    user?: ExtendedUserResource;
   }
 }
 
@@ -28,17 +36,29 @@ const authMiddleware = (fastify: FastifyInstance) => {
 
       const user = (await clerkClient.users.getUser(
         userId
-      )) as unknown as UserResource;
+      )) as unknown as ExtendedUserResource;
 
-      if (user) {
-        console.log("User authenticated successfully");
-
-        request.user = user;
-      } else {
+      if (!user) {
         return reply.code(401).send({
           success: false,
-          message: "unauthorized",
+          message: "Unauthorized",
         });
+      }
+
+      console.log("User authenticated successfully");
+
+      const userExist = await UserDB.findOne({
+        email: user.emailAddresses[0].emailAddress,
+      });
+
+      if (user && userExist) {
+        // Assign MongoDB ObjectId to request.user._MongoId
+        request.user = {
+          ...user,
+          _MongoId: userExist._id as ObjectId,
+        };
+      } else {
+        request.user = user;
       }
     } catch (error) {
       console.error("Error in auth middleware:", error);

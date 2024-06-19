@@ -3,7 +3,8 @@ import {
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
 } from "../../Schemas/error.schema";
-import { UserResource } from "@clerk/types";
+// import { UserResource } from "@clerk/types";
+import { ExtendedUserResource } from "../../Middleware/authMiddleware";
 
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { createUser } from "../../Services/user"; // Import the createUser function
@@ -24,7 +25,7 @@ export default function createUserRoute(fastify: FastifyInstance) {
       const userData = req.user;
 
       try {
-        const result = await createUser(userData as UserResource);
+        const result = await createUser(userData as ExtendedUserResource);
 
         if (result.success) {
           return rep.status(201).send({
