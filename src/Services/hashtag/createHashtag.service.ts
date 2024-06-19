@@ -1,7 +1,7 @@
 import HashtagDB, { IHashtagDocument } from "../../Models/HashtagModel";
 
 type HashtagType = {
-    label: string;
+  label: string;
 };
 
 export async function createHashtagService(
@@ -11,13 +11,30 @@ export async function createHashtagService(
     const hashtagExists = await HashtagDB.findOne({ label: hashtagData.label });
 
     if (hashtagExists) {
+
+      await HashtagDB.updateOne(
+        { label: hashtagData.label },
+        {
+          $inc: {
+            hitCountDay: 1,
+            hitCountWeek: 1,
+            hitCountMonth: 1
+          }
+        }
+      );
+
       return {
-        success: false,
-        message: "Hashtag already exists",
+        success: true,
+        message: "Already exists..Hashtag hit counts updated!",
       };
     }
 
-    const newHashtag: IHashtagDocument = new HashtagDB({ label: hashtagData.label });
+    const newHashtag: IHashtagDocument = new HashtagDB({
+      label: hashtagData.label,
+      hitCountDay: 0,
+      hitCountWeek: 0,
+      hitCountMonth: 0
+    });
     await newHashtag.save();
 
     return {
@@ -25,10 +42,10 @@ export async function createHashtagService(
       message: "Hashtag created successfully",
     };
   } catch (error) {
-    console.error("Error creating hashtag:", error);
+    console.error("Error creating/updating hashtag:", error);
     return {
       success: false,
-      message: "An error occurred while creating the hashtag",
+      message: "An error occurred while creating/updating the hashtag",
     };
   }
 }

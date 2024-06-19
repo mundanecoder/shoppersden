@@ -2,6 +2,9 @@ import { Schema, Document, model, Model } from "mongoose";
 
 export interface IHashtag {
     label: string;
+    hitCountDay: number;
+    hitCountWeek: number;
+    hitCountMonth: number;
 }
 
 export interface IHashtagDocument extends IHashtag, Document {
@@ -19,6 +22,9 @@ const HashtagSchema = new Schema<IHashtagDocument>(
       minlength: 1, 
       maxlength: 20
     },
+    hitCountDay: { type: Number, default: 0 },
+    hitCountWeek: { type: Number, default: 0 },
+    hitCountMonth: { type: Number, default: 0 }
   },
   {
     timestamps: true,
@@ -26,14 +32,6 @@ const HashtagSchema = new Schema<IHashtagDocument>(
 );
 
 HashtagSchema.index({ label: 1 });
-
-/**
- * Keeping placeholder for pre-save hook if needed in future for processing data before saving to database
- * -------------------------------------------------------------------------------------------------------
- * HashtagSchema.pre<IHashtagDocument>("save", function(next) {
-    next();
-  });
- */
 
 const Hashtag: Model<IHashtagDocument> = model<IHashtagDocument>("Hashtag", HashtagSchema);
 

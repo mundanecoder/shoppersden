@@ -1,17 +1,27 @@
-import HashtagDB, { IHashtagDocument } from "../../Models/HashtagModel";
+import Hashtag, { IHashtagDocument } from "../../Models/HashtagModel";
 
-export async function listHashtagsService(): Promise<{ success: boolean; data?: IHashtagDocument[]; message?: string }> {
+// Fetch hashtags from the database and sort by hit counts
+export async function listHashtagsService(search?: string) {
   try {
-    const hashtags = await HashtagDB.find().exec();
+    const query: { label?: { $regex: string; $options: string } } = {};
+    
+    if (search) {
+      query.label = { $regex: search, $options: "i" }; // Case-insensitive search
+    }
+
+    const hashtags = await Hashtag.find(query)
+      .sort({ hitCountDay: -1, hitCountWeek: -1, hitCountMonth: -1, createdAt: -1 }) // Sort by hit counts and creation date
+      .limit(10) // Limit to top 10
+      .exec();
+
     return {
       success: true,
-      data: hashtags,
+      data: hashtags
     };
   } catch (error) {
-    console.error("Error listing hashtags:", error);
     return {
       success: false,
-      message: "An error occurred while listing the hashtags",
+      message: "Failed to fetch hashtags"
     };
   }
 }

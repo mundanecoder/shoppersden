@@ -24,6 +24,13 @@ export function ListHashtags(fastify: FastifyInstance) {
     "/list",
     {
       schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            search: { type: "string" }
+          },
+          required: []
+        },
         response: {
           "200": ListHashtagsResponseSchema,
           "401": UnAuthorizedResponseSchema,
@@ -33,7 +40,8 @@ export function ListHashtags(fastify: FastifyInstance) {
       },
     },
     async (req: FastifyRequest, res: FastifyReply) => {
-      const result = await listHashtagsService();
+      const { search } = req.query as { search?: string };
+      const result = await listHashtagsService(search);
 
       if (result.success) {
         const response = {
