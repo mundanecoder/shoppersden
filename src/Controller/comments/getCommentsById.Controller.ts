@@ -1,24 +1,32 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import {
-  GetPostsByUserIdResponseSchema,
-  GetPostsByUserIdResponse,
-} from "../../Schemas/post/post.schema";
+  GetCommentsByUserIdResponseSchema,
+  GetCommentsByUserIdResponse,
+} from "../../Schemas/comments/comments.schema";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
 } from "../../Schemas/error.schema";
-import { getPostsByUserService } from "../../Services/post/getAllPosts.service";
+import { getCommentsByCommentIdService } from "../../Services/comments/getCommentsById.service";
 
-export default async function getPostsByUser(fastify: FastifyInstance) {
+export default async function getCommentsByCommentId(fastify: FastifyInstance) {
   fastify.withTypeProvider<TypeBoxTypeProvider>().get<{
     Querystring: { page: number; limit: number };
-    Reply: GetPostsByUserIdResponse;
+    Params: { commentId: string };
+    Reply: GetCommentsByUserIdResponse;
   }>(
-    "/",
+    "/:commentId",
     {
       schema: {
+        params: {
+          type: "object",
+          properties: {
+            commentId: { type: "string" },
+          },
+          required: ["commentId"],
+        },
         querystring: {
           type: "object",
           properties: {
@@ -28,21 +36,24 @@ export default async function getPostsByUser(fastify: FastifyInstance) {
           required: ["page", "limit"],
         },
         response: {
-          200: GetPostsByUserIdResponseSchema,
+          200: GetCommentsByUserIdResponseSchema,
           401: UnAuthorizedResponseSchema,
           404: NotFoundResponseSchema,
           500: ServerErrorResponseSchema,
         },
-        tags: ["post"],
+        tags: ["comment"],
       },
     },
     async (
-      req: FastifyRequest<{ Querystring: { page: number; limit: number } }>,
+      req: FastifyRequest<{
+        Querystring: { page: number; limit: number };
+        Params: { commentId: string };
+      }>,
       rep: FastifyReply
     ) => {
       try {
-        // Log request data for debugging
         console.log("Request query:", req.query);
+        console.log("Request params:", req.params);
 
         const userData = req.user;
 
@@ -54,14 +65,15 @@ export default async function getPostsByUser(fastify: FastifyInstance) {
         }
 
         const { page, limit } = req.query;
+        const { commentId } = req.params;
 
-        const result = await getPostsByUserService(
-          userData?._MongoId,
+        const result = await getCommentsByCommentIdService(
+          commentId,
+          userData._MongoId,
           page,
           limit
         );
 
-        // Log result for debugging
         console.log("Result from service:", result);
 
         if ("error" in result) {
@@ -76,10 +88,10 @@ export default async function getPostsByUser(fastify: FastifyInstance) {
 
         return rep.status(200).send(result);
       } catch (error) {
-        console.error("Error in getPostsByUser route:", error);
+        console.error("Error in getCommentsByCommentId route:", error);
         return rep.status(500).send({
           error: "Internal Server Error",
-          message: "An error occurred while fetching posts",
+          message: "An error occurred while fetching comments",
         });
       }
     }

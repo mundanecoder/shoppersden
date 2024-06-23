@@ -1,9 +1,24 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { deletePostService } from "../../Services/post/deletepost.service";
+import {
+  NotFoundResponseSchema,
+  ServerErrorResponseSchema,
+  UnAuthorizedResponseSchema,
+} from "../../Schemas/error.schema";
 
 export default async function deletePostController(fastify: FastifyInstance) {
   fastify.delete<{ Params: { postId: string } }>(
     "/:postId",
+    {
+      schema: {
+        response: {
+          "401": UnAuthorizedResponseSchema,
+          "404": NotFoundResponseSchema,
+          "500": ServerErrorResponseSchema,
+        },
+        tags: ["post"],
+      },
+    },
     async (request, reply) => {
       const { postId } = request.params;
 

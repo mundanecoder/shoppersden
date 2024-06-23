@@ -52,7 +52,6 @@ const authMiddleware = (fastify: FastifyInstance) => {
       });
 
       if (user && userExist) {
-        // Assign MongoDB ObjectId to request.user._MongoId
         request.user = {
           ...user,
           _MongoId: userExist._id as ObjectId,

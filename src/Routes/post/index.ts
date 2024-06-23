@@ -4,6 +4,7 @@ import {
   getPostsByUser,
   deletePostController,
   editPostController,
+  addLIkeToPost,
 } from "../../Controller/post/index";
 import authMiddleware from "../../Middleware/authMiddleware";
 
@@ -13,6 +14,7 @@ const Post: FastifyPluginAsync = async function (fastify, opts) {
   getPostsByUser(fastify);
   deletePostController(fastify);
   editPostController(fastify);
+  addLIkeToPost(fastify);
 };
 
 export default Post;

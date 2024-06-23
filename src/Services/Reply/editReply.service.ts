@@ -1,33 +1,36 @@
-import Post, { IPostDocument } from "../../Models/PostModel";
+import Reply from "../../Models/Reply.Model";
 import User from "../../Models/UserModel";
 import { ObjectId } from "mongodb";
 
-interface EditPostParams {
-  postId: string;
+interface EditReplyParams {
+  replyId: string;
+  userId: ObjectId;
   content: string;
   media?: {
-    images?: string[];
-    videos?: string[];
+    url?: string;
+    format?: string;
+    size?: number;
   };
 }
 
-export async function editPostService({
-  postId,
-  content,
-  media,
-}: EditPostParams) {
-  try {
-    console.log(postId);
+export async function editReplyService(params: EditReplyParams) {
+  const { replyId, userId, content, media } = params;
 
-    const post: IPostDocument | null = await Post.findById(postId);
-    if (!post) {
-      throw new Error("Post not found");
+  try {
+    const reply = await Reply.findOne({ _id: replyId });
+
+    if (!reply) {
+      throw new Error("Reply not found");
+    }
+
+    if (!reply.userId.equals(userId)) {
+      throw new Error("Unauthorized");
     }
 
     let contentUpdated = false;
 
-    if (post.content !== content) {
-      post.content = content;
+    if (reply.content !== content) {
+      reply.content = content;
       contentUpdated = true;
 
       const newMentions = content.match(/@\w+/g) || [];
@@ -39,30 +42,32 @@ export async function editPostService({
 
       const newMentionIds: any[] = mentionUserIds.map((user) => user._id);
 
-      if (!arraysAreEqual(post.mentions, newMentionIds)) {
-        post.mentions = newMentionIds;
+      if (!arraysAreEqual(reply.mentions, newMentionIds)) {
+        reply.mentions = newMentionIds;
       }
 
-      if (!arraysAreEqual(post.hashtags, newHashtags)) {
-        post.hashtags = newHashtags;
+      if (!arraysAreEqual(reply.hashtags, newHashtags)) {
+        reply.hashtags = newHashtags;
       }
     }
 
     if (media) {
-      post.media = media;
+      reply.media = media;
     } else {
-      post.media = media;
+      reply.media = media;
     }
+
+    reply.updatedAt = new Date();
 
     if (contentUpdated || media) {
-      const updatedPost = await post.save();
-      return updatedPost;
+      const updatedReply = await reply.save();
+      return updatedReply;
     }
 
-    return post;
+    return reply;
   } catch (error) {
-    console.error("Error in editPostService:", error);
-    throw new Error("Error editing post");
+    console.error("Error editing reply:", error);
+    throw new Error("Error editing reply");
   }
 }
 

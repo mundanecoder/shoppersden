@@ -24,6 +24,7 @@ export default async function editPostController(fastify: FastifyInstance) {
           "404": NotFoundResponseSchema,
           "500": ServerErrorResponseSchema,
         },
+        tags: ["post"],
       },
     },
     async (request, reply) => {

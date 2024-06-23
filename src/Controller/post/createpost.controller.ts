@@ -5,7 +5,11 @@ import {
   CreatePostResponseSchema,
 } from "../../Schemas/post/post.schema";
 
-import { ServerErrorResponseSchema } from "../../Schemas/error.schema";
+import {
+  NotFoundResponseSchema,
+  ServerErrorResponseSchema,
+  UnAuthorizedResponseSchema,
+} from "../../Schemas/error.schema";
 
 export default async function createNewPost(fastify: FastifyInstance) {
   fastify.post(
@@ -16,7 +20,11 @@ export default async function createNewPost(fastify: FastifyInstance) {
         response: {
           201: CreatePostResponseSchema,
           500: ServerErrorResponseSchema,
+          401: UnAuthorizedResponseSchema,
+          404: NotFoundResponseSchema,
         },
+        description: "create a new post ",
+        tags: ["post"],
       },
     },
     async (req: FastifyRequest, rep: FastifyReply) => {

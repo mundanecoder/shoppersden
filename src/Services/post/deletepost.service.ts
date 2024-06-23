@@ -1,4 +1,6 @@
 import Post from "../../Models/PostModel";
+import Comment from "../../Models/Comment.Model";
+import Reply from "../../Models/Reply.Model";
 import { ObjectId } from "mongodb";
 
 export async function deletePostService(postId: string): Promise<boolean> {
@@ -11,6 +13,13 @@ export async function deletePostService(postId: string): Promise<boolean> {
 
     if (!deletedPost) {
       throw new Error("Post not found");
+    }
+
+    const commentsToDelete = await Comment.find({ postId: postId });
+
+    for (const comment of commentsToDelete) {
+      await Comment.findByIdAndDelete(comment._id);
+      await Reply.deleteMany({ commentId: comment._id });
     }
 
     return true;

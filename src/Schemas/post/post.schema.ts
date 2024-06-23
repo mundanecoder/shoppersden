@@ -1,13 +1,9 @@
-// src/Schemas/post.schema.ts
-import { ObjectId } from "@fastify/mongodb";
 import { Type, Static } from "@sinclair/typebox";
 
-// export const PostRequestSchema = Type.Object({
-//   content: Type.String({ minLength: 1 }),
-//   hashtags: Type.Optional(Type.Array(Type.String())),
-//   mentions: Type.Optional(Type.Array(Type.String())),
-//   mediaUrls: Type.Optional(Type.Array(Type.String())),
-// });
+export const LikePostRequestSchema = Type.Object({
+  postId: Type.String({ format: "objectId" }),
+});
+
 export const CreatePostRequestSchema = Type.Object({
   content: Type.String(),
   media: Type.Optional(
@@ -23,35 +19,74 @@ export const CreatePostResponseSchema = Type.Object({
   post: Type.Object({}),
 });
 
-// export const PostResponseSchema = Type.Object({
-//   _id: Type.String(),
-//   content: Type.String(),
-//   hashtags: Type.Optional(Type.Array(Type.String())),
-//   mentions: Type.Optional(Type.Array(Type.String())),
-//   mediaUrls: Type.Optional(Type.Array(Type.String())),
-//   createdAt: Type.String(),
-//   updatedAt: Type.String(),
-// });
+export const AddLikePostRequestSchema = Type.Object({
+  postId: Type.String(),
+});
 
 export const GetPostsByUserIdResponseSchema = Type.Object({
   message: Type.Boolean(),
-  data: Type.Array(
-    Type.Object({
-      _id: Type.String(),
-      userId: Type.String(),
-      content: Type.String(),
-      hashtags: Type.Optional(Type.Array(Type.String())),
-      mentions: Type.Optional(Type.Array(Type.String())),
-      mediaUrls: Type.Optional(Type.Array(Type.String())),
-      createdAt: Type.String(),
-      updatedAt: Type.String(),
-    })
-  ),
+  data: Type.Object({
+    posts: Type.Array(
+      Type.Object({
+        _id: Type.String(),
+        userId: Type.String(),
+        content: Type.String(),
+        hashtags: Type.Optional(Type.Array(Type.String())),
+        mentions: Type.Optional(Type.Array(Type.String())),
+        mediaUrls: Type.Optional(Type.Array(Type.String())),
+        likesData: Type.Optional(
+          Type.Array(
+            Type.Object({
+              _id: Type.String(),
+              fullName: Type.Optional(Type.String()), // Optional fullName
+            })
+          )
+        ),
+        commentsData: Type.Optional(
+          Type.Array(
+            Type.Object({
+              _id: Type.String(),
+              content: Type.String(),
+              userId: Type.String(),
+            })
+          )
+        ),
+        likesCount: Type.Number(),
+        createdAt: Type.String(),
+        updatedAt: Type.String(),
+      })
+    ),
+    totalPosts: Type.Number(),
+    totalPages: Type.Number(),
+    currentPage: Type.Number(),
+  }),
 });
 
-// export type PostRequest = Static<typeof PostRequestSchema>;
-// export type PostResponse = Static<typeof PostResponseSchema>;
-
-export type GetPostsByUserIdResponse = Static<
-  typeof GetPostsByUserIdResponseSchema
->;
+export type GetPostsByUserIdResponse = {
+  message: boolean;
+  data?: {
+    posts: {
+      _id: string;
+      userId: string;
+      content: string;
+      hashtags?: string[];
+      mentions?: string[];
+      mediaUrls?: string[];
+      likesData?: {
+        _id: string;
+        fullName: string;
+      }[];
+      commentsData?: {
+        _id: string;
+        content: string;
+        fullName: string;
+      }[];
+      likesCount: number;
+      createdAt: string;
+      updatedAt: string;
+    }[];
+    totalPosts: number;
+    totalPages: number;
+    currentPage: number;
+  };
+};

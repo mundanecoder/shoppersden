@@ -52,6 +52,8 @@ export async function handleCreateNewPost(req: FastifyRequest) {
       content,
       media,
     });
+
+    console.log(savedPost);
     return { success: true, post: savedPost };
   } catch (error) {
     console.error("Error in createNewPostService:", error);

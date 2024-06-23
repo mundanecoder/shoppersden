@@ -19,6 +19,7 @@ export default function createUserRoute(fastify: FastifyInstance) {
           "404": NotFoundResponseSchema,
           "500": ServerErrorResponseSchema,
         },
+        tags: ["user"],
       },
     },
     async (req: FastifyRequest, rep: FastifyReply) => {

@@ -1,16 +1,31 @@
 import { Schema, Document, model, Model } from "mongoose";
 import { ObjectId } from "mongodb";
 
-interface IPostDocument extends Document {
+interface IComment extends Document {
   userId: ObjectId;
-  title?: string;
+  content: string;
+  createdAt: Date;
+}
+
+export interface IPostDocument extends Document {
+  _id: ObjectId;
+  title: string;
+  userId: ObjectId;
   content: string;
   hashtags?: string[];
-  mentions?: ObjectId[];
+  mentions?: string[];
   media?: {
     images?: string[];
     videos?: string[];
   };
+  likes: ObjectId[];
+  comments: {
+    _id: ObjectId;
+    content: string;
+    userId: ObjectId; // Assuming userId is ObjectId, change to string if it's string
+    createdAt: Date;
+  }[];
+  postDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,8 +39,8 @@ interface IVideo {
 }
 
 interface IImage {
-  url: string;
-  thumbnailUrl?: string;
+  url: string | null;
+  thumbnailUrl?: string | null;
   format: string;
   size: number;
 }
@@ -45,7 +60,7 @@ const PostSchema = new Schema<IPostDocument>(
         type: [
           {
             url: { type: String, required: true },
-            thumbnailUrl: { type: String, required: true },
+            thumbnailUrl: { type: String },
             format: { type: String, required: true },
             size: { type: Number, required: true },
           },
@@ -56,7 +71,7 @@ const PostSchema = new Schema<IPostDocument>(
         type: [
           {
             url: { type: String, required: true },
-            thumbnailUrl: { type: String, required: true },
+            thumbnailUrl: { type: String },
             format: { type: String, required: true },
             size: { type: Number, required: true },
             duration: { type: Number, required: true },
@@ -64,6 +79,18 @@ const PostSchema = new Schema<IPostDocument>(
         ],
         default: [],
       },
+    },
+    likes: {
+      type: [{ type: Schema.Types.ObjectId, ref: "User" }],
+      default: [],
+    },
+    comments: {
+      type: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+      default: [],
+    },
+    postDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
