@@ -4,6 +4,7 @@ import { getFollowers } from "./getFollowers.service";
 import { getFollowings } from "./getFollowings.service";
 import { countFollowers } from "./countFollowers.service";
 import { countFollowings } from "./countFollowings.service";
+import { mutualFollowers } from "./mutualFollowers.service";
 
 export {
   unfollowEntity,
@@ -12,4 +13,5 @@ export {
   getFollowings,
   countFollowers,
   countFollowings,
+  mutualFollowers
 };

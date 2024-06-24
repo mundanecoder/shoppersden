@@ -7,6 +7,7 @@ import {
   GetFollowers,
   GetFollowings,
   UnfollowEntity,
+  MutualFollowers
 } from "../../Controller/follow";
 
 const Hashtag: FastifyPluginAsync = async function (fastify, opts) {
@@ -17,6 +18,7 @@ const Hashtag: FastifyPluginAsync = async function (fastify, opts) {
   GetFollowings(fastify);
   CountFollowers(fastify);
   CountFollowings(fastify);
+  MutualFollowers(fastify);
 };
 
 export default Hashtag;
