@@ -8,7 +8,9 @@ import fastifySensible from "@fastify/sensible";
 import { clerkPlugin } from "@clerk/fastify";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
+import fastifyAutoload from "@fastify/autoload";
 import { autoLoadPlugin } from "./Plugin/AutoLoadPlugin";
+import fastifyCors from "@fastify/cors";
 
 dotenv.config();
 
@@ -19,19 +21,19 @@ const clerkOptions = {
 
 // Plugin configurations
 const plugins = [
-  {
-    plugin: corsPlugin,
-    options: {
-      origin: "*",
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-      exposedHeaders: ["Content-Length", "ETag"],
-      credentials: true,
-      maxAge: 86400,
-      preflightContinue: false,
-      optionsSuccessStatus: 204,
-    },
-  },
+  // {
+  //   plugin: corsPlugin,
+  //   options: {
+  //     origin: ["http://localhost:5173"], // Adjust to your frontend origin
+  //     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  //     allowedHeaders: ["Content-Type", "Authorization"],
+  //     exposedHeaders: ["Content-Length", "ETag"],
+  //     credentials: true,
+  //     maxAge: 86400,
+  //     preflightContinue: false,
+  //     optionsSuccessStatus: 204,
+  //   },
+  // },
   {
     plugin: autoLoadPlugin,
     options: {
@@ -62,7 +64,10 @@ const fastify = Fastify({
 
 fastify.register(fastifySensible);
 fastify.register(clerkPlugin, clerkOptions);
-
+fastify.register(fastifyCors, {
+  origin: "*",
+  methods: ["GET", "POST"],
+});
 fastify.register(fastifySwagger);
 fastify.register(fastifySwaggerUi, {
   routePrefix: "/api/v1/docs",
@@ -100,7 +105,7 @@ registerPlugins(fastify, plugins);
 const startServer = async () => {
   try {
     await fastify.ready();
-    fastify.listen({ port: 8000 }, (err, address) => {
+    fastify.listen({ port: 8000, host: "0.0.0.0" }, (err, address) => {
       if (err) {
         fastify.log.error(err);
         process.exit(1);
