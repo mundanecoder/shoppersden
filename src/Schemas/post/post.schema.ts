@@ -34,6 +34,7 @@ export const GetPostsByUserIdResponseSchema = Type.Object({
         hashtags: Type.Optional(Type.Array(Type.String())),
         mentions: Type.Optional(Type.Array(Type.String())),
         mediaUrls: Type.Optional(Type.Array(Type.String())),
+        postDeleted: Type.Optional(Type.Boolean()),
         likesData: Type.Optional(
           Type.Array(
             Type.Object({

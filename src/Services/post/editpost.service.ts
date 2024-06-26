@@ -1,5 +1,6 @@
 import Post, { IPostDocument } from "../../Models/PostModel";
 import User from "../../Models/UserModel";
+import Hashtag from "../../Models/HashtagModel";
 import { ObjectId } from "mongodb";
 
 interface EditPostParams {
@@ -27,6 +28,17 @@ export async function editPostService({
     let contentUpdated = false;
 
     if (post.content !== content) {
+      const oldHashtags = post.hashtags || [];
+      for (const oldHashtagId of oldHashtags) {
+        const oldHashtag = await Hashtag.findById(oldHashtagId);
+        if (oldHashtag) {
+          oldHashtag.hitCountDay = Math.max(0, oldHashtag.hitCountDay - 1);
+          oldHashtag.hitCountWeek = Math.max(0, oldHashtag.hitCountWeek - 1);
+          oldHashtag.hitCountMonth = Math.max(0, oldHashtag.hitCountMonth - 1);
+          await oldHashtag.save();
+        }
+      }
+
       post.content = content;
       contentUpdated = true;
 

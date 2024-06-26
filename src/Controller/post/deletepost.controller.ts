@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { deletePostService } from "../../Services/post/deletepost.service";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
 } from "../../Schemas/error.schema";
+import { deleteSoftPostService } from "../../Services/post/deletePost.Soft.service";
 
 export default async function deletePostController(fastify: FastifyInstance) {
   fastify.delete<{ Params: { postId: string } }>(
@@ -23,7 +23,7 @@ export default async function deletePostController(fastify: FastifyInstance) {
       const { postId } = request.params;
 
       try {
-        const success = await deletePostService(postId);
+        const success = await deleteSoftPostService(postId);
 
         if (!success) {
           return reply.status(404).send({ error: "Post not found" });

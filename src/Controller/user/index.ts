@@ -1,3 +1,4 @@
 import createUserRoute from "./saveUserData";
+import getUserRoute from "./getUserData";
 
-export { createUserRoute };
+export { createUserRoute, getUserRoute };
