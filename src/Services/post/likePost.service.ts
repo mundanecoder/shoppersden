@@ -1,4 +1,4 @@
-import Post from "../../Models/PostModel";
+import Post from "../../models/PostModel";
 import { ObjectId } from "@fastify/mongodb";
 
 export interface AddLikeParams {

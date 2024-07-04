@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { createClerkClient, getAuth } from "@clerk/fastify";
 import { UserResource } from "@clerk/types";
-import UserDB from "../Models/UserModel";
+import UserDB from "../models/UserModel";
 import { ObjectId } from "@fastify/mongodb";
 
 const clerkOptions = {

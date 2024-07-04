@@ -1,4 +1,4 @@
-import Reply from "../../Models/Reply.Model"; // Assuming you have a Reply model similar to Comment
+import Reply from "../../models/Reply.Model"; // Assuming you have a Reply model similar to Comment
 import { ObjectId } from "mongodb";
 
 export interface AddLikeToReplyParams {

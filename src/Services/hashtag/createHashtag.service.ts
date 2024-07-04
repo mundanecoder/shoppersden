@@ -1,4 +1,4 @@
-import HashtagDB, { IHashtagDocument } from "../../Models/HashtagModel";
+import HashtagDB, { IHashtagDocument } from "../../models/HashtagModel";
 
 type HashtagType = {
   label: string;
@@ -11,15 +11,14 @@ export async function createHashtagService(
     const hashtagExists = await HashtagDB.findOne({ label: hashtagData.label });
 
     if (hashtagExists) {
-
       await HashtagDB.updateOne(
         { label: hashtagData.label },
         {
           $inc: {
             hitCountDay: 1,
             hitCountWeek: 1,
-            hitCountMonth: 1
-          }
+            hitCountMonth: 1,
+          },
         }
       );
 
@@ -33,7 +32,7 @@ export async function createHashtagService(
       label: hashtagData.label,
       hitCountDay: 0,
       hitCountWeek: 0,
-      hitCountMonth: 0
+      hitCountMonth: 0,
     });
     await newHashtag.save();
 

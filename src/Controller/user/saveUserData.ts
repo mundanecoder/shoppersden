@@ -2,12 +2,12 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
+} from "../../schemas/error.schema";
 // import { UserResource } from "@clerk/types";
-import { ExtendedUserResource } from "../../Middleware/authMiddleware";
+import { ExtendedUserResource } from "../../middleware/authMiddleware";
 
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { createUser } from "../../Services/user"; // Import the createUser function
+import { createUser } from "../../services/user"; // Import the createUser function
 
 export default function createUserRoute(fastify: FastifyInstance) {
   fastify.post(

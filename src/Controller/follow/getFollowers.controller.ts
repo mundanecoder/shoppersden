@@ -1,6 +1,10 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { NotFoundResponseSchema, ServerErrorResponseSchema, UnAuthorizedResponseSchema } from "../../Schemas/error.schema";
-import { getFollowers } from "../../Services/follow";
+import {
+  NotFoundResponseSchema,
+  ServerErrorResponseSchema,
+  UnAuthorizedResponseSchema,
+} from "../../schemas/error.schema";
+import { getFollowers } from "../../services/follow";
 
 const GetFollowersResponseSchema = {
   type: "object",
@@ -13,38 +17,42 @@ const GetFollowersResponseSchema = {
         type: "object",
         properties: {
           _id: { type: "string" },
-          followerId: { type: "string" }
+          followerId: { type: "string" },
         },
-        required: ["_id", "followerId"]
-      }
-    }
+        required: ["_id", "followerId"],
+      },
+    },
   },
-  required: ["success", "message", "followers"]
+  required: ["success", "message", "followers"],
 };
-  
-  export function GetFollowers(fastify: FastifyInstance) {
-    fastify.get(
-      "/followers/:entityId/:entityType",
-      {
-        schema: {
-          response: {
-            "200": GetFollowersResponseSchema,
-            "401": UnAuthorizedResponseSchema,
-            "404": NotFoundResponseSchema,
-            "500": ServerErrorResponseSchema,
-          },
+
+export function GetFollowers(fastify: FastifyInstance) {
+  fastify.get(
+    "/followers/:entityId/:entityType",
+    {
+      schema: {
+        response: {
+          "200": GetFollowersResponseSchema,
+          "401": UnAuthorizedResponseSchema,
+          "404": NotFoundResponseSchema,
+          "500": ServerErrorResponseSchema,
         },
       },
-      async (req: FastifyRequest, res: FastifyReply) => {
-        const { entityId, entityType } = req.params as { entityId: string, entityType: 'user' | 'shop' };
-  
-        try {
-          const followers = await getFollowers(entityId, entityType);
-          return res.status(200).send(followers);
-        } catch (error) {
-          return res.status(500).send({ message: 'An error occurred while retrieving followers.' });
-        }
+    },
+    async (req: FastifyRequest, res: FastifyReply) => {
+      const { entityId, entityType } = req.params as {
+        entityId: string;
+        entityType: "user" | "shop";
+      };
+
+      try {
+        const followers = await getFollowers(entityId, entityType);
+        return res.status(200).send(followers);
+      } catch (error) {
+        return res
+          .status(500)
+          .send({ message: "An error occurred while retrieving followers." });
       }
-    );
-  }
-  
+    }
+  );
+}

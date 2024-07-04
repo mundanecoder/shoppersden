@@ -4,13 +4,13 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import {
   EditCommentRequestSchema,
   EditCommentResponseSchema,
-} from "../../Schemas/comments/comments.schema";
+} from "../../schemas/comments/comments.schema";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
-import { editCommentService } from "../../Services/comments/editComments.service";
+} from "../../schemas/error.schema";
+import { editCommentService } from "../../services/comments/editComments.service";
 
 interface EditCommentRequest extends FastifyRequest {
   params: { commentId: string };

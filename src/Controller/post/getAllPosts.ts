@@ -3,13 +3,13 @@ import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import {
   GetPostsByUserIdResponseSchema,
   GetPostsByUserIdResponse,
-} from "../../Schemas/post/post.schema";
+} from "../../schemas/post/post.schema";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
-import { getPostsByUserService } from "../../Services/post/getAllPosts.service";
+} from "../../schemas/error.schema";
+import { getPostsByUserService } from "../../services/post/getAllPosts.service";
 
 export default async function getPostsByUser(fastify: FastifyInstance) {
   fastify.withTypeProvider<TypeBoxTypeProvider>().get<{

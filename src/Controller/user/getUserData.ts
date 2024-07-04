@@ -2,12 +2,12 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
+} from "../../schemas/error.schema";
 // import { UserResource } from "@clerk/types";
-import { ExtendedUserResource } from "../../Middleware/authMiddleware";
+import { ExtendedUserResource } from "../../middleware/authMiddleware";
 
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { getUserInfo } from "../../Services/user/getUserData.service"; // Import the getUserInfo function
+import { getUserInfo } from "../../services/user/getUserData.service"; // Import the getUserInfo function
 
 export default function getUserRoute(fastify: FastifyInstance) {
   fastify.get(

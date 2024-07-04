@@ -1,15 +1,15 @@
 import Fastify from "fastify";
 import { join } from "path";
 import * as dotenv from "dotenv";
-import connectToDb from "./Database/db";
-import { registerPlugins } from "./Utility/pluginMapper";
-import { corsPlugin } from "./Plugin/CorsPlugin";
+import connectToDb from "./database/db";
+import { registerPlugins } from "./utility/pluginMapper";
+import { corsPlugin } from "./plugin/CorsPlugin";
 import fastifySensible from "@fastify/sensible";
 import { clerkPlugin } from "@clerk/fastify";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import fastifyAutoload from "@fastify/autoload";
-import { autoLoadPlugin } from "./Plugin/AutoLoadPlugin";
+import { autoLoadPlugin } from "./plugin/AutoLoadPlugin";
 import fastifyCors from "@fastify/cors";
 
 dotenv.config();

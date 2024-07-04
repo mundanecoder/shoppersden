@@ -1,14 +1,18 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { NotFoundResponseSchema, ServerErrorResponseSchema, UnAuthorizedResponseSchema } from "../../Schemas/error.schema";
-import { createHashtagService } from "../../Services/hashtag";
+import {
+  NotFoundResponseSchema,
+  ServerErrorResponseSchema,
+  UnAuthorizedResponseSchema,
+} from "../../schemas/error.schema";
+import { createHashtagService } from "../../services/hashtag";
 
 // Request body schema for hashtag incoming payload
 const CreateHashtagSchema = {
   type: "object",
   required: ["label"],
   properties: {
-    label: { type: "string" }
-  }
+    label: { type: "string" },
+  },
 };
 
 // Response schema for hashtag successful creation
@@ -16,13 +20,13 @@ const CreateHashtagResponseSchema = {
   type: "object",
   properties: {
     message: { type: "string" },
-    data: { 
+    data: {
       type: "object",
       properties: {
-        label: { type: "string" }
-      }
-    }
-  }
+        label: { type: "string" },
+      },
+    },
+  },
 };
 
 export function CreateHashtag(fastify: FastifyInstance) {
@@ -46,7 +50,7 @@ export function CreateHashtag(fastify: FastifyInstance) {
       if (result.success) {
         const response = {
           message: result.message,
-          data: hashtagData
+          data: hashtagData,
         };
         return res.status(200).send(response);
       } else {

@@ -3,13 +3,13 @@ import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import {
   GetCommentsByUserIdResponseSchema,
   GetCommentsByUserIdResponse,
-} from "../../Schemas/comments/comments.schema";
+} from "../../schemas/comments/comments.schema";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
-import { getCommentsByCommentIdService } from "../../Services/comments/getCommentsById.service";
+} from "../../schemas/error.schema";
+import { getCommentsByCommentIdService } from "../../services/comments/getCommentsById.service";
 
 export default async function getCommentsByCommentId(fastify: FastifyInstance) {
   fastify.withTypeProvider<TypeBoxTypeProvider>().get<{

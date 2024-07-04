@@ -2,13 +2,13 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import {
   EditReplyRequestSchema,
   EditReplyResponseSchema,
-} from "../../Schemas/reply/reply.schema";
+} from "../../schemas/reply/reply.schema";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
-import { editReplyService } from "../../Services/Reply/editReply.service";
+} from "../../schemas/error.schema";
+import { editReplyService } from "../../services/Reply/editReply.service";
 
 interface EditReplyRequest extends FastifyRequest {
   params: { replyId: string };

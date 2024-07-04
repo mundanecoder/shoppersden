@@ -3,8 +3,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
-import { deleteSoftPostService } from "../../Services/post/deletePost.Soft.service";
+} from "../../schemas/error.schema";
+import { deleteSoftPostService } from "../../services/post/deletePost.Soft.service";
 
 export default async function deletePostController(fastify: FastifyInstance) {
   fastify.delete<{ Params: { postId: string } }>(

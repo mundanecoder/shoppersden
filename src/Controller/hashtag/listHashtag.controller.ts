@@ -1,6 +1,10 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { NotFoundResponseSchema, ServerErrorResponseSchema, UnAuthorizedResponseSchema } from "../../Schemas/error.schema";
-import { listHashtagsService } from "../../Services/hashtag";
+import {
+  NotFoundResponseSchema,
+  ServerErrorResponseSchema,
+  UnAuthorizedResponseSchema,
+} from "../../schemas/error.schema";
+import { listHashtagsService } from "../../services/hashtag";
 
 // Response schema for hashtag listing
 const ListHashtagsResponseSchema = {
@@ -13,10 +17,10 @@ const ListHashtagsResponseSchema = {
         type: "object",
         properties: {
           label: { type: "string" },
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 };
 
 export function ListHashtags(fastify: FastifyInstance) {
@@ -27,9 +31,9 @@ export function ListHashtags(fastify: FastifyInstance) {
         querystring: {
           type: "object",
           properties: {
-            search: { type: "string" }
+            search: { type: "string" },
           },
-          required: []
+          required: [],
         },
         response: {
           "200": ListHashtagsResponseSchema,
@@ -46,7 +50,7 @@ export function ListHashtags(fastify: FastifyInstance) {
       if (result.success) {
         const response = {
           message: "Hashtags fetched successfully",
-          data: result.data
+          data: result.data,
         };
         return res.status(200).send(response);
       } else {

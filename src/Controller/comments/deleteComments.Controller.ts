@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { deleteCommentService } from "../../Services/comments/deleteComments.service";
+import { deleteCommentService } from "../../services/comments/deleteComments.service";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
+} from "../../schemas/error.schema";
 interface ErrorResponse {
   error: string;
 }

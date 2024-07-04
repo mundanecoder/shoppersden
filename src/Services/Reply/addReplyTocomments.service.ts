@@ -1,6 +1,6 @@
-import Reply, { IReplyDocument } from "../../Models/Reply.Model";
-import User from "../../Models/UserModel";
-import Comment, { ICommentDocument } from "../../Models/Comment.Model";
+import Reply, { IReplyDocument } from "../../models/Reply.Model";
+import User from "../../models/UserModel";
+import Comment, { ICommentDocument } from "../../models/Comment.Model";
 import { ObjectId } from "mongodb";
 
 interface AddReplyParams {

@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { deleteReplyService } from "../../Services/Reply/deleteReply.service";
+import { deleteReplyService } from "../../services/Reply/deleteReply.service";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
+} from "../../schemas/error.schema";
 
 export default async function deleteReplyController(fastify: FastifyInstance) {
   fastify.delete<{ Params: { replyId: string } }>(

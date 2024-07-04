@@ -1,6 +1,6 @@
-import Comment, { ICommentDocument } from "../../Models/Comment.Model";
-import User from "../../Models/UserModel";
-import Post from "../../Models/PostModel";
+import Comment, { ICommentDocument } from "../../models/Comment.Model";
+import User from "../../models/UserModel";
+import Post from "../../models/PostModel";
 import { ObjectId } from "mongodb";
 
 export interface AddCommentParams {

@@ -1,5 +1,5 @@
-import Reply from "../../Models/Reply.Model";
-import User from "../../Models/UserModel";
+import Reply from "../../models/Reply.Model";
+import User from "../../models/UserModel";
 import { ObjectId } from "mongodb";
 
 interface EditReplyParams {

@@ -1,4 +1,4 @@
-import UserDB, { IUserDocument } from "../../Models/UserModel";
+import UserDB, { IUserDocument } from "../../models/UserModel";
 
 export async function getUserInfo(identifier: {
   email?: string;

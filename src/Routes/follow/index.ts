@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import authMiddleware from "../../Middleware/authMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
 import {
   CountFollowers,
   CountFollowings,
@@ -7,8 +7,8 @@ import {
   GetFollowers,
   GetFollowings,
   UnfollowEntity,
-  MutualFollowers
-} from "../../Controller/follow";
+  MutualFollowers,
+} from "../../controller/follow";
 
 const Hashtag: FastifyPluginAsync = async function (fastify, opts) {
   fastify.addHook("preHandler", authMiddleware(fastify));

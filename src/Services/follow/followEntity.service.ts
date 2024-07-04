@@ -1,4 +1,4 @@
-import Follow, { IFollowDocument } from "../../Models/FollowModel";
+import Follow, { IFollowDocument } from "../../models/FollowModel";
 
 export async function followEntity(
   followerId: string,
@@ -9,7 +9,11 @@ export async function followEntity(
     throw new Error("You cannot follow yourself.");
   }
 
-  const existingFollow = await Follow.findOne({ followerId, followingId, followType });
+  const existingFollow = await Follow.findOne({
+    followerId,
+    followingId,
+    followType,
+  });
   if (existingFollow) {
     return {
       success: true,
@@ -17,7 +21,11 @@ export async function followEntity(
     };
   }
 
-  const follow: IFollowDocument = new Follow({ followerId, followingId, followType });
+  const follow: IFollowDocument = new Follow({
+    followerId,
+    followingId,
+    followType,
+  });
   await follow.save();
   return {
     success: true,

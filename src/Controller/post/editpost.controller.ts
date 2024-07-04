@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { editPostService } from "../../Services/post/editpost.service";
+import { editPostService } from "../../services/post/editpost.service";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../Schemas/error.schema";
+} from "../../schemas/error.schema";
 
 interface EditPostParams {
   content: string;

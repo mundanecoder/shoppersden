@@ -1,4 +1,4 @@
-import Reply from "../../Models/Reply.Model";
+import Reply from "../../models/Reply.Model";
 import { ObjectId } from "mongodb";
 
 export async function deleteReplyService(replyId: string): Promise<boolean> {

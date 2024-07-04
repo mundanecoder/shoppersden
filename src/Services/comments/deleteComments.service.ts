@@ -1,5 +1,5 @@
-import Comment from "../../Models/Comment.Model";
-import Reply from "../../Models/Reply.Model";
+import Comment from "../../models/Comment.Model";
+import Reply from "../../models/Reply.Model";
 import { ObjectId } from "mongodb";
 
 export async function deleteCommentService(

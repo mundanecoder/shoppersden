@@ -1,4 +1,4 @@
-import UserDB, { IUserDocument } from "../../Models/UserModel";
+import UserDB, { IUserDocument } from "../../models/UserModel";
 import { UserResource } from "@clerk/types";
 
 export async function createUser(

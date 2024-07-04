@@ -1,6 +1,6 @@
-import Post from "../../Models/PostModel";
-import Comment from "../../Models/Comment.Model";
-import Reply from "../../Models/Reply.Model";
+import Post from "../../models/PostModel";
+import Comment from "../../models/Comment.Model";
+import Reply from "../../models/Reply.Model";
 import { ObjectId } from "mongodb";
 
 export async function deletePostService(postId: string): Promise<boolean> {

@@ -5,8 +5,8 @@ import {
   deletePostController,
   editPostController,
   addLIkeToPost,
-} from "../../Controller/post/index";
-import authMiddleware from "../../Middleware/authMiddleware";
+} from "../../controller/post/index";
+import authMiddleware from "../../middleware/authMiddleware";
 
 const Post: FastifyPluginAsync = async function (fastify, opts) {
   fastify.addHook("preHandler", authMiddleware(fastify));
