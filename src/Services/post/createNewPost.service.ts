@@ -1,6 +1,7 @@
 import { ObjectId } from "@fastify/mongodb";
 import Post from "../../Models/PostModel";
 import User from "../../Models/UserModel";
+import Hashtag from "../../Models/HashtagModel";
 import { FastifyRequest } from "fastify";
 
 interface CreatePostParams {
@@ -20,14 +21,39 @@ export async function createNewPostService(params: CreatePostParams) {
 
   console.log(mentions, hashtags, "mentions");
 
+  // Get mention user IDs
   const mentionUserIds = await User.find({
     userName: { $in: mentions.map((mention) => mention.slice(1)) },
   }).select("_id");
 
+  const hashtagIds = await Promise.all(
+    hashtags.map(async (hashtag) => {
+      const label = hashtag.slice(1);
+      let hashtagDoc = await Hashtag.findOne({ label });
+
+      if (hashtagDoc) {
+        hashtagDoc.hitCountDay += 1;
+        hashtagDoc.hitCountWeek += 1;
+        hashtagDoc.hitCountMonth += 1;
+        await hashtagDoc.save();
+      } else {
+        hashtagDoc = new Hashtag({
+          label,
+          hitCountDay: 1,
+          hitCountWeek: 1,
+          hitCountMonth: 1,
+        });
+        await hashtagDoc.save();
+      }
+
+      return hashtagDoc._id;
+    })
+  );
+
   const newPost = new Post({
     userId,
     content,
-    hashtags,
+    hashtags: hashtagIds,
     mentions: mentionUserIds.map((user) => user._id),
     media,
   });
