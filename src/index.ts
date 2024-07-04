@@ -37,7 +37,7 @@ const plugins = [
   {
     plugin: autoLoadPlugin,
     options: {
-      dir: join(__dirname, "./routes"),
+      dir: join(__dirname, "./Routes"),
     },
   },
 ];
