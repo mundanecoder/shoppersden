@@ -1,7 +1,7 @@
 import { ObjectId } from "@fastify/mongodb";
-import Post from "../../models/PostModel";
-import User from "../../models/UserModel";
-import Hashtag from "../../models/HashtagModel";
+import Post from "../../Models/PostModel";
+import User from "../../Models/UserModel";
+import Hashtag from "../../Models/HashtagModel";
 import { FastifyRequest } from "fastify";
 
 interface CreatePostParams {

@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import Post, { IPostDocument } from "../../models/PostModel";
-import User from "../../models/UserModel";
+import Post, { IPostDocument } from "../../Models/PostModel";
+import User from "../../Models/UserModel";
 import { Result } from "../../types/Post.getAllPost.type";
 
 // interface Result {

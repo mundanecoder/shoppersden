@@ -1,6 +1,6 @@
 import { FastifyPluginAsync } from "fastify";
-import { createUserRoute, getUserRoute } from "../../controller/user/index";
-import authMiddleware from "../../middleware/authMiddleware";
+import { createUserRoute, getUserRoute } from "../../Controller/user/index";
+import authMiddleware from "../../Middleware/authMiddleware";
 
 const Demo: FastifyPluginAsync = async function (fastify, opts) {
   fastify.addHook("preHandler", authMiddleware(fastify));

@@ -5,9 +5,9 @@ import {
   addCommentRoute,
   addLIkeToComment,
   getCommentsByUser,
-} from "../../controller/comments";
+} from "../../Controller/comments";
 
-import authMiddleware from "../../middleware/authMiddleware";
+import authMiddleware from "../../Middleware/authMiddleware";
 
 const Post: FastifyPluginAsync = async function (fastify, opts) {
   fastify.addHook("preHandler", authMiddleware(fastify));

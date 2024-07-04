@@ -1,4 +1,4 @@
-import Follow, { IFollowDocument } from "../../models/FollowModel";
+import Follow, { IFollowDocument } from "../../Models/FollowModel";
 
 export async function unfollowEntity(
   followerId: string,

@@ -1,6 +1,6 @@
-import Post, { IPostDocument } from "../../models/PostModel";
-import User from "../../models/UserModel";
-import Hashtag from "../../models/HashtagModel";
+import Post, { IPostDocument } from "../../Models/PostModel";
+import User from "../../Models/UserModel";
+import Hashtag from "../../Models/HashtagModel";
 import { ObjectId } from "mongodb";
 
 interface EditPostParams {

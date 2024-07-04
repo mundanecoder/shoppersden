@@ -3,8 +3,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
-import { countFollowings } from "../../services/follow";
+} from "../../Schemas/error.schema";
+import { countFollowings } from "../../Services/follow";
 
 const CountFollowingsResponseSchema = {
   type: "object",

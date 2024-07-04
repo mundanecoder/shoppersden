@@ -3,8 +3,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
-import { listHashtagsService } from "../../services/hashtag";
+} from "../../Schemas/error.schema";
+import { listHashtagsService } from "../../Services/hashtag";
 
 // Response schema for hashtag listing
 const ListHashtagsResponseSchema = {

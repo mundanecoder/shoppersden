@@ -4,8 +4,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
-import { addLikeToPostService } from "../../services/post/likePost.service";
+} from "../../Schemas/error.schema";
+import { addLikeToPostService } from "../../Services/post/likePost.service";
 
 export default async function addLIkeToPost(fastify: FastifyInstance) {
   fastify.patch<{ Params: { postId: string } }>(

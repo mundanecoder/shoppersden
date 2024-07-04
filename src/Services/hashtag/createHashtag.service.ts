@@ -1,4 +1,4 @@
-import HashtagDB, { IHashtagDocument } from "../../models/HashtagModel";
+import HashtagDB, { IHashtagDocument } from "../../Models/HashtagModel";
 
 type HashtagType = {
   label: string;

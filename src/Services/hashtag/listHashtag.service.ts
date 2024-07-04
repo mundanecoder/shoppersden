@@ -1,4 +1,4 @@
-import Hashtag, { IHashtagDocument } from "../../models/HashtagModel";
+import Hashtag, { IHashtagDocument } from "../../Models/HashtagModel";
 
 // Fetch hashtags from the database and sort by hit counts
 export async function listHashtagsService(search?: string) {

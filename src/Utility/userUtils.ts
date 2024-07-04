@@ -1,4 +1,4 @@
-import User, { IUserDocument } from "../models/UserModel";
+import User, { IUserDocument } from "../Models/UserModel";
 
 /**
  * Generates a username based on the user's first name and last name.

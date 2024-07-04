@@ -1,11 +1,11 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { addLikeToReplyService } from "../../services/Reply/addLIkeToReply.service";
+import { addLikeToReplyService } from "../../Services/Reply/addLIkeToReply.service";
 import { ObjectId } from "mongodb";
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
+} from "../../Schemas/error.schema";
 
 interface LikeReplyRequest extends FastifyRequest {
   Params: {

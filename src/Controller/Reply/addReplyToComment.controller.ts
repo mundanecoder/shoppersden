@@ -10,8 +10,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
-import { addReplyToCommentService } from "../../services/Reply/addReplyTocomments.service";
+} from "../../Schemas/error.schema";
+import { addReplyToCommentService } from "../../Services/Reply/addReplyTocomments.service";
 
 interface AddReplyRequest extends FastifyRequest {
   params: { commentId: string };

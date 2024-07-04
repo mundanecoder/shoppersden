@@ -1,4 +1,4 @@
-import Comment from "../../models/Comment.Model";
+import Comment from "../../Models/Comment.Model";
 import { ObjectId } from "mongodb";
 
 export interface AddLikeToCommentParams {

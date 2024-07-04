@@ -1,4 +1,4 @@
-import Follow from "../../models/FollowModel";
+import Follow from "../../Models/FollowModel";
 
 export async function mutualFollowers(
   userId1: string,

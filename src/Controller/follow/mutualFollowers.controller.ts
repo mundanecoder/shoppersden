@@ -3,8 +3,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
-import { mutualFollowers } from "../../services/follow";
+} from "../../Schemas/error.schema";
+import { mutualFollowers } from "../../Services/follow";
 
 const MutualFollowersRequestSchema = {
   type: "object",

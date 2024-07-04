@@ -1,15 +1,15 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { handleCreateNewPost } from "../../services/post/createNewPost.service";
+import { handleCreateNewPost } from "../../Services/post/createNewPost.service";
 import {
   CreatePostRequestSchema,
   CreatePostResponseSchema,
-} from "../../schemas/post/post.schema";
+} from "../../Schemas/post/post.schema";
 
 import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
+} from "../../Schemas/error.schema";
 
 export default async function createNewPost(fastify: FastifyInstance) {
   fastify.post(

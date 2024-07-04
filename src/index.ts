@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import { join } from "path";
 import * as dotenv from "dotenv";
-import connectToDb from "./database/db";
+import connectToDb from "./Database/db";
 import { registerPlugins } from "./utility/pluginMapper";
 import { corsPlugin } from "./plugin/CorsPlugin";
 import fastifySensible from "@fastify/sensible";

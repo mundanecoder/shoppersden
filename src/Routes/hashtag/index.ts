@@ -1,6 +1,6 @@
 import { FastifyPluginAsync } from "fastify";
-import authMiddleware from "../../middleware/authMiddleware";
-import { CreateHashtag, ListHashtags } from "../../controller/hashtag";
+import authMiddleware from "../../Middleware/authMiddleware";
+import { CreateHashtag, ListHashtags } from "../../Controller/hashtag";
 
 const Hashtag: FastifyPluginAsync = async function (fastify, opts) {
   fastify.addHook("preHandler", authMiddleware(fastify));

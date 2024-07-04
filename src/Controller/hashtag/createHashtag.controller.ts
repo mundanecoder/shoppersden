@@ -3,8 +3,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
-import { createHashtagService } from "../../services/hashtag";
+} from "../../Schemas/error.schema";
+import { createHashtagService } from "../../Services/hashtag";
 
 // Request body schema for hashtag incoming payload
 const CreateHashtagSchema = {

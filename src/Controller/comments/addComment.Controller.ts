@@ -8,8 +8,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
-import { addCommentToPostService } from "../../services/comments/addPostcomment.service";
+} from "../../Schemas/error.schema";
+import { addCommentToPostService } from "../../Services/comments/addPostcomment.service";
 
 interface AddCommentRequest extends FastifyRequest {
   params: { postId: string };

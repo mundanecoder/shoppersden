@@ -1,5 +1,5 @@
-import Comment from "../../models/Comment.Model";
-import User from "../../models/UserModel";
+import Comment from "../../Models/Comment.Model";
+import User from "../../Models/UserModel";
 import { ObjectId } from "mongodb";
 
 interface EditCommentParams {

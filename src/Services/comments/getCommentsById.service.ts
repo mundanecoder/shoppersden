@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import Comment, { ICommentDocument } from "../../models/Comment.Model";
-import User from "../../models/UserModel";
+import Comment, { ICommentDocument } from "../../Models/Comment.Model";
+import User from "../../Models/UserModel";
 
 interface Result {
   message: boolean;

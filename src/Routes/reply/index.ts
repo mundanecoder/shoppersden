@@ -4,8 +4,8 @@ import {
   deleteReplyController,
   editReplyToComment,
   addLikeToReply,
-} from "../../controller/Reply";
-import authMiddleware from "../../middleware/authMiddleware";
+} from "../../Controller/Reply";
+import authMiddleware from "../../Middleware/authMiddleware";
 
 const Demo: FastifyPluginAsync = async function (fastify, opts) {
   fastify.addHook("preHandler", authMiddleware(fastify));

@@ -3,8 +3,8 @@ import {
   NotFoundResponseSchema,
   ServerErrorResponseSchema,
   UnAuthorizedResponseSchema,
-} from "../../schemas/error.schema";
-import { addLikeToCommentService } from "../../services/comments/addLIkeToComment.service";
+} from "../../Schemas/error.schema";
+import { addLikeToCommentService } from "../../Services/comments/addLIkeToComment.service";
 
 export default async function addLikeToComment(fastify: FastifyInstance) {
   fastify.patch<{ Params: { commentId: string } }>(
