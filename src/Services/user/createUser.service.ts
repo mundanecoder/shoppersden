@@ -9,15 +9,19 @@ export async function createUser(
       email: userData?.emailAddresses[0].emailAddress,
     });
 
+    console.log(userData?.firstName, "userData");
+
     console.log("here");
     const generateUsername = (): string => {
       const randomString = Math.random().toString(36).substring(2, 8);
       return `user_${randomString}`;
     };
 
+    console.log(generateUsername);
+
     if (!userExist) {
       const newUser: IUserDocument = new UserDB({
-        firstname: userData?.firstName,
+        firstName: userData?.firstName,
         lastName: userData?.lastName,
         userName: generateUsername(),
         fullName: userData?.fullName,

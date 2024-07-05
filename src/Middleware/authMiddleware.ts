@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { createClerkClient, getAuth } from "@clerk/fastify";
+import { createClerkClient, getAuth, Token } from "@clerk/fastify";
 import { UserResource } from "@clerk/types";
 import UserDB from "../Models/UserModel";
 import { ObjectId } from "@fastify/mongodb";
@@ -26,7 +26,13 @@ const clerkClient = createClerkClient(clerkOptions);
 const authMiddleware = (fastify: FastifyInstance) => {
   return async (request: FastifyRequest, reply: FastifyReply) => {
     try {
+      const token = request.headers.authorization?.split(" ")[1];
+
+      console.log(token ? token : "token from header");
+
       const { userId } = getAuth(request);
+
+      console.log(userId, "userId");
 
       if (!userId) {
         return reply
